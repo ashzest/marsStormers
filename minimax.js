@@ -1,5 +1,4 @@
 var boardGame;
-var truedepth = maxDepth;
 var PresentPlayTag = $("#PresentTurn");
 var MultiPlayer = false;
 var player = 'X';
@@ -7,11 +6,12 @@ var player_2 = 'O';
 var PresentTurn = player;
 var EndOfGame = 1;
 var maxDepth = 10;
+var truedepth = maxDepth;
 var depth;
 var alpha = Number.MIN_SAFE_INTEGER;
 var beta = Number.MAX_SAFE_INTEGER;
 const WinningCombs = [
-    
+
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -28,22 +28,22 @@ const cells = $(".cell");
 
 function SetLevelOne() {
     maxDepth = 1;
-truedepth= maxDepth;
+    truedepth = maxDepth;
 }
 
 function SetLevelTwo() {
     maxDepth = 2;
-    truedepth= maxDepth;
+    truedepth = maxDepth;
 }
 
 function SetLevelThree() {
     maxDepth = 3;
-    truedepth= maxDepth;
+    truedepth = maxDepth;
 }
 
 function SetLevelInf() {
     maxDepth = 9;
-    truedepth= maxDepth;
+    truedepth = maxDepth;
 }
 $('.button').on('click', function() {
     $(".btn-group").addClass('noHover');
@@ -53,13 +53,13 @@ $('.button').on('click', function() {
 
 function startGame() {
     maxDepth = 10;
-    truedepth= 10;
+    truedepth = 10;
     $('.button').css('color', 'white')
     $('.sug').css('color', '#723267')
     $("table").animate({
         opacity: "1"
     });
-    if(MultiPlayer==true){
+    if (MultiPlayer == true) {
         $(".sug").removeClass("disabled");
         $(".sug").removeClass("noHover");
     }
@@ -68,14 +68,14 @@ function startGame() {
         $(".btn-group").removeClass("noHover");
         $(".sug").removeClass("disabled");
         $(".sug").removeClass("noHover");
-        
+
     }
-        player = player;
-        PresentTurn = player;
-        PresentPlayTag = $("#PresentTurn");
-        $("#f1").text(PresentTurn);
-        $("#f2").text(PresentTurn == 'X' ? "O" : "X");
-   
+    player = player;
+    PresentTurn = player;
+    PresentPlayTag = $("#PresentTurn");
+    $("#f1").text(PresentTurn);
+    $("#f2").text(PresentTurn == 'X' ? "O" : "X");
+
     cells.on('click', PresentTurnClick);
     EndOfGame = 0;
     $(".end-game").value = "none";
@@ -91,7 +91,7 @@ function endGame() {
     ClearTicTacToe();
     PresentPlayTag.text("- - - - - - - -");
     cells.off('click');
-  
+
     $(".btn-group").addClass("disabled");
     $(".sug").addClass("disabled");
     maxDepth = 10;
@@ -110,12 +110,12 @@ function PresentTurnClick(square) {
                     PresentPlayTag.text("Your Turn : ");
                     cells.on('click', PresentTurnClick);
                     turn(bestChoice(false), player_2);
-                    $('.sug').on('click', function(){suggestions(bestChoice(true),player)});
-                    
+                    $('.sug').on('click', function() { suggestions(bestChoice(true), player) });
+
                 }, 700);
-            }else if(MultiPlayer=== true)
-             { $('.sug').on('click', function(){suggestions(bestChoice(true),player)});
-           
+            } else if (MultiPlayer === true) {
+                $('.sug').on('click', function() { suggestions(bestChoice(true), player) });
+
 
             }
         }
@@ -142,11 +142,11 @@ function turn(boxId, player) {
 }
 
 function MinMax(PresentGameBoard, currentPlayer, alpha, beta, depth, flag) {
-   
-    if(flag==true)
-    maxDepth=10;
-    if(flag==false)
-    maxDepth= truedepth;
+
+    if (flag == true)
+        maxDepth = 10;
+    if (flag == false)
+        maxDepth = truedepth;
     var availableMoves = AvailableMoves();
 
     if (CheckForWin(PresentGameBoard, player)) {
@@ -170,10 +170,10 @@ function MinMax(PresentGameBoard, currentPlayer, alpha, beta, depth, flag) {
         PresentGameBoard[availableMoves[i]] = currentPlayer;
 
         if (currentPlayer == player_2) {
-            var maxScoreIndex = MinMax(PresentGameBoard, player, alpha, beta, depth + 1,flag);
+            var maxScoreIndex = MinMax(PresentGameBoard, player, alpha, beta, depth + 1, flag);
             move.score = maxScoreIndex.score;
         } else {
-            var maxScoreIndex = MinMax(PresentGameBoard, player_2, alpha, beta, depth + 1,flag);
+            var maxScoreIndex = MinMax(PresentGameBoard, player_2, alpha, beta, depth + 1, flag);
             move.score = maxScoreIndex.score;
         }
 
@@ -252,8 +252,7 @@ function AvailableMoves() {
 }
 
 function CheckForTie() {
-    if (AvailableMoves().length === 0&&CheckForWin!=true
-) {
+    if (AvailableMoves().length === 0 && CheckForWin != true) {
         EndOfGame = 1;
         cells.off('click');
         cells.animate({
@@ -267,7 +266,7 @@ function CheckForTie() {
 }
 
 function bestChoice(flag) {
-    return MinMax(boardGame, player_2, alpha, beta, 0,flag).index;
+    return MinMax(boardGame, player_2, alpha, beta, 0, flag).index;
 }
 
 function ClearTicTacToe() {
@@ -323,24 +322,25 @@ function activeMultiPlayer() {
         MultiPlayer = MultiPlayer == true ? false : true;
     }
 }
+
 function suggestions(boxId, player) {
-    if(AvailableMoves.length!=9){
-    setTimeout(function() {
-    $("#" + boxId).animate({
-        opacity: "0.7"
-    });},2);
-    setTimeout(function() {
-        $("#" + boxId).animate({
-            opacity: "1"
-        });},3);
-        
-                // $('.sug').css('color', 'white');
-                $(".sug").removeClass("disabled");
-                $(".sug").removeClass("noHover");
-                
-    
-   
-}}
+    if (AvailableMoves.length != 9) {
+        setTimeout(function() {
+            $("#" + boxId).animate({
+                opacity: "0.7"
+            });
+        }, 2);
+        setTimeout(function() {
+            $("#" + boxId).animate({
+                opacity: "1"
+            });
+        }, 3);
+
+        // $('.sug').css('color', 'white');
+        $(".sug").removeClass("disabled");
+        $(".sug").removeClass("noHover");
 
 
 
+    }
+}
