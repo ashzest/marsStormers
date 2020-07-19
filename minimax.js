@@ -326,12 +326,12 @@ function suggestions(boxId, player) {
 
 
 
-  $(".feature").click(function(){
+  $(".feature").hover(function(){
     $(".feat").fadeToggle("slow");
   });
-  $(".howtoplay").click(function(){
+  $(".howtoplay").hover(function(){
     $(".htplay").fadeToggle("slow");
   });
-  $(".contactus").click(function(){
+  $(".contactus").hover(function(){
     $(".contactuss").fadeToggle("slow");
   });
