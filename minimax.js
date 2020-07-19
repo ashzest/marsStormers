@@ -5,11 +5,10 @@ var player = "X";
 var player_2 = "O";
 var PresentTurn = player;
 var EndOfGame = 1;
+var c = 0;
 var maxDepth = 10;
 var truedepth = maxDepth;
 var depth;
-var alpha = Number.MIN_SAFE_INTEGER;
-var beta = Number.MAX_SAFE_INTEGER;
 const WinningCombs = [
   [0, 1, 2],
   [3, 4, 5],
@@ -67,7 +66,6 @@ function startGame() {
     $(".sug").removeClass("disabled");
     $(".sug").removeClass("noHover");
   }
-  player = player;
   PresentTurn = player;
   PresentPlayTag = $("#PresentTurn");
   $("#f1").text(PresentTurn);
@@ -81,6 +79,7 @@ function startGame() {
 }
 
 function endGame() {
+  console.log(c);
   $("table").animate({
     opacity: "0.4",
   });
@@ -102,9 +101,8 @@ function PresentTurnClick(square) {
       if (MultiPlayer === false) {
         cells.off("click");
         setTimeout(function () {
-          PresentPlayTag.text("Your Turn : ");
-          cells.on("click", PresentTurnClick);
           turn(bestChoice(false), player_2);
+          cells.on("click", PresentTurnClick);
           $(".sug").on("click", function () {
             suggestions(bestChoice(true), player);
           });
@@ -135,7 +133,8 @@ function turn(boxId, player) {
   PresentTurn = PresentTurn == "X" ? "O" : "X";
 }
 
-function MinMax(PresentGameBoard, currentPlayer, alpha, beta, depth, flag) {
+function MinMax(PresentGameBoard, currentPlayer, depth, flag) {
+  c++;
   if (flag == true) maxDepth = 10;
   if (flag == false) maxDepth = truedepth;
   var availableMoves = AvailableMoves();
@@ -161,10 +160,10 @@ function MinMax(PresentGameBoard, currentPlayer, alpha, beta, depth, flag) {
     PresentGameBoard[availableMoves[i]] = currentPlayer;
 
     if (currentPlayer == player_2) {
-      var maxScoreIndex = MinMax(PresentGameBoard, player, alpha, beta, depth + 1, flag);
+      var maxScoreIndex = MinMax(PresentGameBoard, player, depth + 1, flag);
       move.score = maxScoreIndex.score;
     } else {
-      var maxScoreIndex = MinMax(PresentGameBoard, player_2, alpha, beta, depth + 1, flag);
+      var maxScoreIndex = MinMax(PresentGameBoard, player_2, depth + 1, flag);
       move.score = maxScoreIndex.score;
     }
 
@@ -179,8 +178,6 @@ function MinMax(PresentGameBoard, currentPlayer, alpha, beta, depth, flag) {
     for (var i = 0; i < moves.length; i++) {
       if (moves[i].score > bestScore) {
         bestScore = moves[i].score;
-        if (alpha < bestScore) alpha = bestScore;
-        if (beta <= alpha) break;
         bestChoice = i;
       }
     }
@@ -189,8 +186,6 @@ function MinMax(PresentGameBoard, currentPlayer, alpha, beta, depth, flag) {
     for (var i = 0; i < moves.length; i++) {
       if (moves[i].score < bestScore) {
         bestScore = moves[i].score;
-        if (beta > bestScore) beta = bestScore;
-        if (beta <= alpha) break;
         bestChoice = i;
       }
     }
@@ -254,7 +249,7 @@ function CheckForTie() {
 }
 
 function bestChoice(flag) {
-  return MinMax(boardGame, player_2, alpha, beta, 0, flag).index;
+  return MinMax(boardGame, player_2, 0, flag).index;
 }
 
 function ClearTicTacToe() {
@@ -328,3 +323,15 @@ function suggestions(boxId, player) {
     $(".sug").removeClass("noHover");
   }
 }
+
+
+
+  $(".feature").click(function(){
+    $(".feat").fadeToggle("slow");
+  });
+  $(".howtoplay").click(function(){
+    $(".htplay").fadeToggle("slow");
+  });
+  $(".contactus").click(function(){
+    $(".contactuss").fadeToggle("slow");
+  });
