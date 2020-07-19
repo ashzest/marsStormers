@@ -9,9 +9,7 @@ body {
 }
 
 #header-nav {
-   background-image: linear-gradient(to bottom right,#371168 , 
-   rgb(76, 39, 100),rgb(73, 54, 88)
-   ,rgb(54, 21, 114), rgb(84, 44, 110));
+   background-image: linear-gradient(to bottom right,#371168 , rgb(76, 39, 100),rgb(73, 54, 88),rgb(54, 21, 114), rgb(84, 44, 110));
    border-radius: 0;
    border: 0;
    border-left: 0px;
