@@ -4,7 +4,7 @@ Please refer the link to our Techical Document regarding the Tic Tac Toe Project
 
 https://1drv.ms/p/s!AigC59qH7Oz-nGtHknkYvlZEDzI3
 
-Tic Tac Toe game using minimax algorithm, using concepts of AI.
+Tic Tac Toe game using the Minimax Algorithm and the concepts of AI.
 It is also multiplayer, has difficulty levels and gives suggestions too for playing the best move.
 Our AI agent is an Utility-Based Agent.
 Utility Based Agents are goal-oriented agent but provide an extra component of utility measurement which makes them different by providing a measure of success at a given state.
