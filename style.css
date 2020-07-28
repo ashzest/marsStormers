@@ -1,6 +1,7 @@
 html {
     background-color: rgb(63, 31, 95);
     background-image: url('Assets/nebula.jpg');
+    animation: animatedBackground 7s linear infinite alternate;
 }
 
 body {
@@ -235,3 +236,18 @@ h2 {
 ul li{
     background-color: rgb(228, 204, 173);
 }
+
+@keyframes animatedBackground {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 100% 0;
+    }
+  }
+  #animate-area {
+    background-image: url('Assets/nebula.jpg');
+    background-position: 0px 0px;
+    background-repeat: repeat-x;
+    animation: animatedBackground 10s linear infinite alternate;
+  }
