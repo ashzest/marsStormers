@@ -116,9 +116,9 @@
             <div class="end-game row">
                 <span> 
             <h2>Tap on Player 2 to play with a crew member!</h2>
-            
-            <div class="col-md-6" id="Grid1"><button onClick="ChooseGrid1()" class="btn-lg btn-success active">Grid 3x3</button></div>
-            <div class="col-md-6" id="Grid2"><button onClick="ChooseGrid2()" class="btn-lg btn-primary active">Grid 4x4</button></div>
+            </span>
+            <div class="col-md-6" id="new-game"><button onClick="ChooseGrid1()" class="btn-lg btn-primary active">Grid 3x3</button></div>
+            <div class="col-md-6" id="new-game"><button onClick="ChooseGrid2()" class="btn-lg btn-success active">Grid 4x4</button></div>
             <h2>Choose your Grid then click on NewGame!</h2>
                 <div class="col-md-6" id="new-game"><button onClick="startGame()" class="btn-lg btn-primary active">New Game</button></div>
                 <div class="col-md-6" id="new-game"><button onClick="endGame()" class="btn-lg btn-primary active">End Game</button></div>
@@ -128,22 +128,31 @@
         </div>
 
         <div class="col-md-6 col-md-offset-1 col-xs-12" id="board-game">
-            <table class="Grid1" id="grid">
+            <table class = "Grid2" id="grid">
                 <h2 class="text-center row" id="PresentTurn">- - - - - - - -</h2>
                 <tr>
                     <td class="cell" id="0"></td>
                     <td class="cell" id="1"></td>
                     <td class="cell" id="2"></td>
+                    <td class="cell" id="3"></td>
                 </tr>
                 <tr>
-                    <td class="cell" id="3"></td>
                     <td class="cell" id="4"></td>
                     <td class="cell" id="5"></td>
-                </tr>
-                <tr>
                     <td class="cell" id="6"></td>
                     <td class="cell" id="7"></td>
+                </tr>
+                <tr>
                     <td class="cell" id="8"></td>
+                    <td class="cell" id="9"></td>
+                    <td class="cell" id="10"></td>
+                    <td class="cell" id="11"></td>
+                </tr>
+                <tr>
+                    <td class="cell" id="12"></td>
+                    <td class="cell" id="13"></td>
+                    <td class="cell" id="14"></td>
+                    <td class="cell" id="15"></td>
                 </tr>
             </table>
             <br>
@@ -168,8 +177,8 @@
     <script src=" https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js "></script>
     <script src="minimax.js "></script>
     <script>
-        function ChooseGrid2(){
-            location.href='4X4.html';
+        function ChooseGrid1(){
+            location.href='index.html';
         }
     </script>
 </body>

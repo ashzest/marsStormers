@@ -8,6 +8,10 @@ var EndOfGame = 1;
 var maxDepth = 10;
 var truedepth = maxDepth;              //Stores the actual maxdepth according to level and comes handy at the time of suggestions 
 var depth;
+var c;
+var chance;
+var Grid1 = true;
+var x = document.getElementById("grid").rows.length;
 const WinningCombs = [                 //Stores the winning combinations for everyplayer
   [0, 1, 2],
   [3, 4, 5],
@@ -20,6 +24,22 @@ const WinningCombs = [                 //Stores the winning combinations for eve
   [0, 4, 8],
   [2, 4, 6],
 ];
+
+const WinningCombs2 = [                 //Stores the winning combinations for everyplayer
+  [0, 1, 2, 3],
+  [4, 5, 6, 7],
+  [8, 9, 10, 11],
+  [12, 13, 14, 15],
+
+  [0, 4, 8, 12],
+  [1, 5, 9, 13],
+  [2, 6, 10, 14],
+  [3, 7, 11, 15],
+
+  [0, 5, 10, 15],
+  [3, 6, 9, 12],
+];
+
 
 const cells = $(".cell");          //Selects each cell class on HTML 
 
@@ -39,7 +59,7 @@ function SetLevelThree() {          //Sets maxdepth in recursion tree as 3
 }
 
 function SetLevelInf() {            //Sets maxdepth in recursion tree as 9
-  maxDepth = 9;
+  maxDepth = 10;
   truedepth = maxDepth;
 }
 $(".button").on("click", function () {   //Adds the desired effect to the level buttons
@@ -73,7 +93,12 @@ function startGame() {
   cells.on("click", PresentTurnClick);           //Enables the player to play the turn by clicking the cell
   EndOfGame = 0;
   $(".end-game").value = "none";
+  if(x==3){
   boardGame = Array.from(Array(9).keys());       //Generates key for each cell with cell id
+  }
+  else if(x==4){
+  boardGame = Array.from(Array(16).keys()); 
+  }
   ClearTicTacToe();                     
 }
 
@@ -131,65 +156,63 @@ function turn(boxId, player) {                //Takes the boxid and player and f
   PresentTurn = PresentTurn == "X" ? "O" : "X";
 }
 
-function MinMax(PresentGameBoard, currentPlayer, depth, flag) {
+function MinMax(PresentGameBoard, currentPlayer, depth, flag, alpha, beta) { //Optimised using alpha beta, flag for suggestions
+  
   if (flag == true) maxDepth = 10;            //For suggestions
   if (flag == false) maxDepth = truedepth;    //For AI agent
   var availableMoves = AvailableMoves();      //Get an array of empty cells from the present board state
 
   if (CheckForWin(PresentGameBoard, player)) {//If terminal state is reached
-    return {
-      score: -100 + depth,                   //Adds the depth to the score of the Minimizing player to ensure that AI agent selects Shortest path to Win
-    };                                       
+    return -100+depth;                        //Adds the depth to the score of the Minimizing player to ensure that AI agent selects Shortest path to Win
+                                          
   } else if (CheckForWin(PresentGameBoard, player_2)) {
-    return {
-      score: 100 - depth,                     //Not only the AI wants to win, but also wants to anticipate the shortest way to win
-    };                                        //Hence our agent proves to be UTILITY BASED 
+    return 100-depth;                                 //Hence our agent proves to be UTILITY BASED 
   } else if (availableMoves.length === 0 || depth == maxDepth) {
-    return {
-      score: 0,                               //Score is returned as zero in case of tie or when the setLevel condition is reached 
-    };
+    return 0;
   }
 
-  var moves = [];                   //A var that stores the the outcomes of minimax on every pending cell of the present state of board
-  for (var i = 0; i < availableMoves.length; i++) {  //Loop for avaiable moves of present state
-    var move = {};                                   //A var that stores information of present move for every iteration
-    move.index = PresentGameBoard[availableMoves[i]];     //Sets the index of move as the boxid of the cell on present board
-    PresentGameBoard[availableMoves[i]] = currentPlayer;  //Sets the boxid of that cell as player id to anticipate next moves of the alternate player
+ depth=depth+1;
 
-    if (currentPlayer == player_2) {
-      var maxScoreIndex = MinMax(PresentGameBoard, player, depth + 1, flag); //call minimax for the alternate player and increase depth by one to indicate next move
-      move.score = maxScoreIndex.score;                                      //Store score of current move as score of minimax if that move is played
-    } else {
-      var maxScoreIndex = MinMax(PresentGameBoard, player_2, depth + 1, flag);
-      move.score = maxScoreIndex.score;
-    }
-
-    PresentGameBoard[availableMoves[i]] = move.index;                        //Removes the playerid of the currentplayer from the board cell and puts original id of the cell
-                                                                             //as that was just put to anticipate next moves.
-    moves.push(move);                                                        //push info of the current move in moves
-  }
-
-  var bestChoice;                                                            //Made to store index of the best possible move from moves array
-  if (currentPlayer === player_2) {
-    var bestScore = -10000;                                                  //Setting the score as minimum possible for the maximizing player
-    for (var i = 0; i < moves.length; i++) {
-      if (moves[i].score > bestScore) {                                      //chooses the move with maximum score from the moves array 
-        bestScore = moves[i].score;
-        bestChoice = i;                                                      //stores index of the move with maximum score by the end of the loop
+var newscore, move;                                       //newscore stores result of minmax
+if(currentPlayer==player_2){                              //if currentPlayer is player_2
+  
+  for(var i = 0; i<availableMoves.length;i++){             //Loop till available moves in present board
+      move = PresentGameBoard[availableMoves[i]];          //Store the current index in move
+      PresentGameBoard[availableMoves[i]] = currentPlayer; //Store playerid in cell id to anticipate next moves
+      newscore=MinMax(PresentGameBoard,player,depth,flag, alpha,beta); //call minmax for new state
+      PresentGameBoard[availableMoves[i]] = move;          //remove the player id and store original id
+      if(newscore>alpha){                                  //if alpha is less than new score, update the value of alpha to new score
+       alpha=newscore;
+       if(depth===1){                                       //store the value at depth one because that is the ultimate result of that branch
+        chance=move;
       }
-    }
-  } else {
-    var bestScore = 10000;                                                   //Setting the score as maximum possible for minimizing player
-    for (var i = 0; i < moves.length; i++) {                                
-      if (moves[i].score < bestScore) {                                      //Chooses the move with minimum score from the moves array
-        bestScore = moves[i].score;
-        bestChoice = i;                                                      //Stores index of the move with minimim score by the end of the loop
-      }
-    }
-  }
-
-  return moves[bestChoice];                                                  //Returns the best move from the moves array by bestchoice index
+     } 
+   else if(alpha >=beta){                                    //if alpha is more than beta, return alpha from there
+   return alpha;
 }
+
+}return alpha;                             
+}
+else{
+  for(var i = 0; i<availableMoves.length;i++){           //Loop till available moves in present board
+      move = PresentGameBoard[availableMoves[i]];        //Store the current index in move
+      PresentGameBoard[availableMoves[i]] = currentPlayer;    //Store playerid in cell id to anticipate next moves
+      newscore=MinMax(PresentGameBoard,player_2,depth,flag, alpha,beta); //call minmax for new state
+      PresentGameBoard[availableMoves[i]] = move;         //remove the player id and store original id
+      
+      if(newscore<beta){                                  //if beta is more than new score, update the value of alpha to new score
+          beta=newscore;
+          if(depth===1){                                 //store the value at depth one because that is the ultimate result of that branch
+              chance = move;
+          }
+      }
+      else if (beta <= alpha)                            //if alpha is more than beta, return beta from there
+              return beta;           
+  }
+}
+return beta; 
+}
+
 
 function CheckForWin(board, player) {                                        
   let plays = board.reduce(
@@ -197,9 +220,15 @@ function CheckForWin(board, player) {
     []
   );
   let gameFinished = null;
-  for (let [index, win] of WinningCombs.entries()) {                        //For every index of winning combos(row of 3), check if every element of that index is there in the plays of the player
-    if (win.every((elem) => plays.indexOf(elem) > -1)) {                    //When every element of that index is found, store the playerid and that index of winning combos
-      gameFinished = {                                                      //Store id of player in case of win and the corresponding index of winning combos
+  var WinningC;
+  if(x==3){                                                          //for 3x3 grid
+    WinningC= WinningCombs;
+  }else if(x==4){                                                    //for 4x4 grid
+    WinningC= WinningCombs2;
+  }
+  for (let [index, win] of WinningC.entries()) {                        //For every index of winning combos(row of 3), check if every element of that index is there in the plays of the player
+    if (win.every((elem) => plays.indexOf(elem) > -1)) {                //When every element of that index is found, store the playerid and that index of winning combos
+      gameFinished = {                                                   //Store id of player in case of win and the corresponding index of winning combos
         index: index,
         player: player,
       };
@@ -212,17 +241,23 @@ function CheckForWin(board, player) {
 function gameOver(gameFinished) {
   EndOfGame = 1;
   maxDepth = 10;
-  cells.off("click");                                                     //Disable the cells of boardgame
+  cells.off("click");                                                 //Disable the cells of boardgame
   cells.animate({
     opacity: "0.4",
   });
-  for (let index of WinningCombs[gameFinished.index]) {                   //Animate the cells of the index of Winning combo
+  var WinningC;
+  if(x==3){
+    WinningC= WinningCombs;
+  }else if(x==4){
+    WinningC= WinningCombs2;
+  }
+  for (let index of WinningC[gameFinished.index]) {                   //Animate the cells of the index of Winning combo
     setTimeout(function () {
       $("#" + index).css("background-color", "green");
       $("#" + index).animate({
         opacity: "1",
       });
-      $("#PresentTurn").text(gameFinished.player + " WINS");             //Displaying the winner
+      $("#PresentTurn").text(gameFinished.player + " WINS");            //Displaying the winner
     }, 500);
   }
 }
@@ -246,7 +281,9 @@ function CheckForTie() {
 }
 
 function bestChoice(flag) {                                            //Flag parameter to differentiate between AI and human player
-  return MinMax(boardGame, player_2, 0, flag).index;                   //Returns index of best move
+   MinMax(boardGame, player_2, 0, flag, -Infinity, +Infinity);                   //Returns index of best move
+   var index = chance;
+   return index;
 }
 
 function ClearTicTacToe() {
@@ -304,7 +341,7 @@ function activeMultiPlayer() {         //Differentiates between two player mode 
 }
 
 function suggestions(boxId, player) {        //Takes bestchoice of the currentplayer and creates a blinking effect
-  if (AvailableMoves.length != 9) {
+  if (AvailableMoves.length != 9||AvailableMoves.length != 16) {
     setTimeout(function () {
       $("#" + boxId).animate({
         opacity: "0.6",
