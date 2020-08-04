@@ -8,7 +8,6 @@ var EndOfGame = 1;
 var maxDepth = 10;
 var truedepth = maxDepth;              //Stores the actual maxdepth according to level and comes handy at the time of suggestions 
 var depth;
-var c;
 var chance;
 var Grid1 = true;
 var x = document.getElementById("grid").rows.length;
@@ -182,13 +181,13 @@ if(currentPlayer==player_2){                              //if currentPlayer is 
       newscore=MinMax(PresentGameBoard,player,depth,flag, alpha,beta); //call minmax for new state
       PresentGameBoard[availableMoves[i]] = move;          //remove the player id and store original id
       if(newscore>alpha){                                  //if alpha is less than new score, update the value of alpha to new score
-       alpha=newscore;
-       if(depth===1){                                       //store the value at depth one because that is the ultimate result of that branch
-        chance=move;
-      }
-     } 
-   else if(alpha >=beta){                                    //if alpha is more than beta, return alpha from there
-   return alpha;
+      alpha=newscore;
+      if(depth===1){                                       //store the value at depth one because that is the ultimate result of that branch
+      chance=move;
+  }
+} 
+else if(alpha >=beta){                                    //if alpha is more than beta, return alpha from there
+  return alpha;
 }
 
 }return alpha;                             
