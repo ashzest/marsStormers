@@ -66,6 +66,7 @@ $(".button").on("click", function () {   //Adds the desired effect to the level 
 });
 
 function startGame() {
+  cells.removeClass("disabled");
   maxDepth = 6;
   truedepth = 6;
   $(".button").css("color", "white");      
@@ -146,8 +147,8 @@ function turn(boxId, player) {                //Takes the boxid and player and f
   } else PresentPlayTag.text("You Play Next: " + currentPlayer);
   boardGame[boxId] = player;                  //Changes the boxid to the player's id
   $("#" + boxId).text(player);                //Displays the boxid as the player's id
-  CheckForTie();
   let gameFinished = CheckForWin(boardGame, player);  //Passes the boardgame with the currentplayer and checks for win
+  CheckForTie();
   if (gameFinished) {
     gameOver(gameFinished);
   }
@@ -238,6 +239,7 @@ function CheckForWin(board, player) {
 }
 
 function gameOver(gameFinished) {
+  cells.addClass("disabled");
   EndOfGame = 1;
   maxDepth = 6;
   cells.off("click");                                                 //Disable the cells of boardgame
@@ -266,8 +268,9 @@ function AvailableMoves() {
 }
 
 function CheckForTie() {
-  if (AvailableMoves().length === 0 ) {           //If board game is filled and no Winning combo is found
+  if (AvailableMoves().length === 0) {           //If board game is filled and no Winning combo is found
     EndOfGame = 1;
+    cells.addClass("disabled");
     cells.off("click");
     cells.animate({
       opacity: "0.4",
