@@ -1,15 +1,14 @@
-var boardGame;                          //Game board of 9 cells
+var boardGame;                          //Game board of number of cells
 var PresentPlayTag = $("#PresentTurn"); // Display the current player's name
 var MultiPlayer = false;   
 var player = "X";                       //Minimizing Player (human player)
 var player_2 = "O";                     //Maximizing Player (AI agent)
 var PresentTurn = player;
 var EndOfGame = 1;
-var maxDepth = 10;
+var maxDepth = 6;
 var truedepth = maxDepth;              //Stores the actual maxdepth according to level and comes handy at the time of suggestions 
 var depth;
 var chance;
-var Grid1 = true;
 var x = document.getElementById("grid").rows.length;
 const WinningCombs = [                 //Stores the winning combinations for everyplayer
   [0, 1, 2],
@@ -57,8 +56,8 @@ function SetLevelThree() {          //Sets maxdepth in recursion tree as 3
   truedepth = maxDepth;
 }
 
-function SetLevelInf() {            //Sets maxdepth in recursion tree as 9
-  maxDepth = 10;
+function SetLevelInf() {            //Sets maxdepth in recursion tree as 6. Earlier we had kept it till length of board but that is not required
+  maxDepth = 6;                     //Since the utility based agent will anyway not choose longer moves to win
   truedepth = maxDepth;
 }
 $(".button").on("click", function () {   //Adds the desired effect to the level buttons
@@ -67,8 +66,8 @@ $(".button").on("click", function () {   //Adds the desired effect to the level 
 });
 
 function startGame() {
-  maxDepth = 10;
-  truedepth = 10;
+  maxDepth = 6;
+  truedepth = 6;
   $(".button").css("color", "white");      
   $(".sug").css("color", "#723267");      //Increases the opacity of table(boardgame) and suggestion button as the game starts
   $("table").animate({
@@ -112,7 +111,7 @@ function endGame() {                             //disables the boardgame on end
 
   $(".btn-group").addClass("disabled");          //disables the suggestion and level buttons on endgame
   $(".sug").addClass("disabled");
-  maxDepth = 10;
+  maxDepth = 6;
   $(".button").css("color", "white");
 }
 
@@ -157,7 +156,7 @@ function turn(boxId, player) {                //Takes the boxid and player and f
 
 function MinMax(PresentGameBoard, currentPlayer, depth, flag, alpha, beta) { //Optimised using alpha beta, flag for suggestions
   
-  if (flag == true) maxDepth = 10;            //For suggestions
+  if (flag == true) maxDepth = 6;            //For suggestions
   if (flag == false) maxDepth = truedepth;    //For AI agent
   var availableMoves = AvailableMoves();      //Get an array of empty cells from the present board state
 
@@ -239,7 +238,7 @@ function CheckForWin(board, player) {
 
 function gameOver(gameFinished) {
   EndOfGame = 1;
-  maxDepth = 10;
+  maxDepth = 6;
   cells.off("click");                                                 //Disable the cells of boardgame
   cells.animate({
     opacity: "0.4",
