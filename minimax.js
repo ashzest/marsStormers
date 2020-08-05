@@ -8,7 +8,6 @@ var EndOfGame = 1;
 var maxDepth = 6;
 var truedepth = maxDepth;              //Stores the actual maxdepth according to level and comes handy at the time of suggestions 
 var depth;
-var c = 0;
 var chance;
 var x = document.getElementById("grid").rows.length;
 const WinningCombs = [                 //Stores the winning combinations for everyplayer
@@ -146,7 +145,6 @@ function turn(boxId, player) {                //Takes the boxid and player and f
     else PresentPlayTag.text("AI's turn " + currentPlayer);
   } else PresentPlayTag.text("You Play Next: " + currentPlayer);
   boardGame[boxId] = player;                  //Changes the boxid to the player's id
-  c++;
   $("#" + boxId).text(player);                //Displays the boxid as the player's id
   CheckForTie();
   let gameFinished = CheckForWin(boardGame, player);  //Passes the boardgame with the currentplayer and checks for win
@@ -268,7 +266,7 @@ function AvailableMoves() {
 }
 
 function CheckForTie() {
-  if (AvailableMoves().length === 0 || c==16) {           //If board game is filled and no Winning combo is found
+  if (AvailableMoves().length === 0 ) {           //If board game is filled and no Winning combo is found
     EndOfGame = 1;
     cells.off("click");
     cells.animate({
